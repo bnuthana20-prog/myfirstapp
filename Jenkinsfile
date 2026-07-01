@@ -10,6 +10,8 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-creds')
         IMAGE_NAME = "bnuthana/my-firstapp"
         IMAGE_TAG = "${BUILD_NUMBER}"
+        JAVA_HOME = tool 'JDK21'
+        PATH = "${JAVA_HOME}\\bin;${env.PATH}"
     }
 
     stages {
@@ -21,6 +23,9 @@ pipeline {
 
         stage('Build JAR') {
             steps {
+                bat 'echo JAVA_HOME=%JAVA_HOME%'
+                bat 'java -version'
+                bat 'mvn -v'
                 bat 'mvn -Dmaven.test.failure.ignore=true clean package'
             }
         }
