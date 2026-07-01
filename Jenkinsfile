@@ -2,12 +2,12 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven_3.9.6' 
-        jdk 'JDK_21'        
+        maven 'Maven3'
+        jdk 'JDK21'
     }
 
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub-creds') // ID from Jenkins credentials
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-creds')
         IMAGE_NAME = "bnuthana/my-firstapp"
         IMAGE_TAG = "${BUILD_NUMBER}"
     }
@@ -28,7 +28,6 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    echo "Building: ${IMAGE_NAME}:${IMAGE_TAG}"
                     bat "docker build -t \"${IMAGE_NAME}:${IMAGE_TAG}\" ."
                 }
             }
@@ -38,10 +37,9 @@ pipeline {
             steps {
                 script {
                     withDockerRegistry(credentialsId: 'dockerhub-creds', url: 'https://index.docker.io/v1/') {
-                        bat "docker tag \"${IMAGE_NAME}:${IMAGE_TAG}\" \"index.docker.io/${IMAGE_NAME}:${IMAGE_TAG}\""
-                        bat "docker push \"index.docker.io/${IMAGE_NAME}:${IMAGE_TAG}\""
-                        bat "docker tag \"${IMAGE_NAME}:${IMAGE_TAG}\" \"index.docker.io/${IMAGE_NAME}:latest\""
-                        bat "docker push \"index.docker.io/${IMAGE_NAME}:latest\""
+                        bat "docker push \"${IMAGE_NAME}:${IMAGE_TAG}\""
+                        bat "docker tag \"${IMAGE_NAME}:${IMAGE_TAG}\" \"${IMAGE_NAME}:latest\""
+                        bat "docker push \"${IMAGE_NAME}:latest\""
                     }
                 }
             }
