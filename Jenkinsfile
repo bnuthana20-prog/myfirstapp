@@ -2,12 +2,12 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven_3.9.6'  // Check name in Manage Jenkins → Tools
-        jdk 'JDK_21'         // Check name in Manage Jenkins → Tools
+        maven 'Maven_3.9.6' 
+        jdk 'JDK_21'        
     }
 
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub-creds')
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-creds') // ID from Jenkins credentials
         IMAGE_NAME = "bnuthana/my-firstapp"
         IMAGE_TAG = "${BUILD_NUMBER}"
     }
@@ -62,4 +62,4 @@ pipeline {
             cleanWs()
         }
     }
-} // <-- This closing brace was likely missing
+}
