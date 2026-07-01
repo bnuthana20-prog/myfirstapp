@@ -12,7 +12,7 @@ pipeline {
         IMAGE_TAG = "${BUILD_NUMBER}"
         JAVA_HOME = tool 'JDK21'
         M2-HOME = "${tool 'Maven3'}"
-        PATH = "${JAVA_HOME}\\bin;${M2-HOME}\\bin;${env.PATH}"
+        PATH = "${JAVA_HOME}\\bin;${M2_HOME}\\bin;${env.PATH}"
     }
 
     stages {
