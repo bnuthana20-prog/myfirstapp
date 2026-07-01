@@ -40,7 +40,6 @@ pipeline {
             steps {
                 withEnv(["KUBECONFIG=C:\\Users\\bnuth\\.kube_jenkins\\config"]) {
                     bat 'kubectl apply -f k8s-deployment.yaml'
-                    bat "kubectl set image deployment/myfirstapp-deployment myfirstapp=${IMAGE_NAME}:${IMAGE_TAG}"
                     bat 'kubectl rollout status deployment/myfirstapp-deployment --timeout=120s'
                 }
             }
