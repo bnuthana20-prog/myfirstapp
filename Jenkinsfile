@@ -1,6 +1,8 @@
 pipeline {
     agent any
-    
+    tools {
+        maven 'Maven3'
+    }
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-creds')
         IMAGE_NAME = "bnuthana/my-firstapp"
