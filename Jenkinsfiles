@@ -1,0 +1,37 @@
+pipeline {
+    agent any
+    tools {
+        jdk 'JDK21'
+        maven 'Maven3'
+    }
+    environment {
+        DOCKERHUB_CRED = credentials('dockerhub')
+        IMAGE_NAME = "bnuthana/my-firstapp"
+        IMAGE_TAG = "${env.BUILD_NUMBER}"
+    }
+    stages {
+        stage('Build JAR') {
+            steps {
+                sh 'mvn clean package -DskipTests'
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
+                sh "docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${IMAGE_NAME}:latest"
+            }
+        }
+        stage('Push to Docker Hub') {
+            steps {
+                sh "echo ${DOCKERHUB_CRED_PSW} | docker login -u ${DOCKERHUB_CRED_USR} --password-stdin"
+                sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
+                sh "docker push ${IMAGE_NAME}:latest"
+            }
+        }
+        stage('Deploy to K8s') {
+            steps {
+                sh "kubectl set image deployment/myfirstapp myfirstapp=${IMAGE_NAME}:${IMAGE_TAG} --record"
+            }
+        }
+    }
+}
