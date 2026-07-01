@@ -11,7 +11,8 @@ pipeline {
         IMAGE_NAME = "bnuthana/my-firstapp"
         IMAGE_TAG = "${BUILD_NUMBER}"
         JAVA_HOME = tool 'JDK21'
-        PATH = "${JAVA_HOME}\\bin;${env.PATH}"
+        M2-HOME = "${tool 'Maven3'}"
+        PATH = "${JAVA_HOME}\\bin;${M2-HOME}\\bin;${env.PATH}"
     }
 
     stages {
