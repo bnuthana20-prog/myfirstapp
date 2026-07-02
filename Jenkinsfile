@@ -31,6 +31,7 @@ pipeline {
                         java -version
                         "${mvnHome}\\bin\\mvn.cmd" -v
                         "${mvnHome}\\bin\\mvn.cmd" -Dmaven.test.failure.ignore=true clean package
+                        dir target
                     """
                 }
             }
