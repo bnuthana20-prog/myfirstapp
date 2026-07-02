@@ -28,6 +28,7 @@ pipeline {
                         set M2_HOME=${mvnHome}
                         set PATH=${javaHome}\\bin;${mvnHome}\\bin;%PATH%
                         echo JAVA_HOME=%JAVA_HOME%
+                        dir "%JAVA_HOME%\\bin\\java.exe"
                         java -version
                         "${mvnHome}\\bin\\mvn.cmd" -v
                         "${mvnHome}\\bin\\mvn.cmd" -Dmaven.test.failure.ignore=true clean package
