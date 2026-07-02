@@ -21,7 +21,6 @@ pipeline {
                 script {
                     def javaHome = tool 'JDK21'
                     def mvnHome = tool 'Maven3'
-                    
                     bat """
                         set JAVA_HOME=${javaHome}
                         set M2_HOME=${mvnHome}
@@ -31,7 +30,10 @@ pipeline {
                         java -version
                         "${mvnHome}\\bin\\mvn.cmd" -v
                         "${mvnHome}\\bin\\mvn.cmd" -Dmaven.test.failure.ignore=true clean package
+                        "${mvnHome}\\bin\\mvn.cmd" -Dmaven.test.failure.ignore=true clean package
+                        echo "--- LISTING TARGET FOLDER ---"
                         dir target
+                        echo "-----------------------------"
                     """
                 }
             }
