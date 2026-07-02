@@ -10,25 +10,28 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-creds')
         IMAGE_NAME = "bnuthana/my-firstapp"
         IMAGE_TAG = "${BUILD_NUMBER}"
-        JAVA_HOME = "${tool 'JDK21'}"
     }
 
     stages {
         stage('Checkout') {
-            steps {
-                checkout scm
-            }
+            steps { checkout scm }
         }
 
         stage('Build JAR') {
             steps {
                 script {
-                    def mvnCmd = "${tool 'Maven3'}\\bin\\mvn.cmd"
-                    bat 'echo JAVA_HOME=%JAVA_HOME%' 
-                    bat 'echo PATH=%PATH%'
-                    bat 'java -version'
-                    bat "\"${mvnCmd}\" -v"
-                    bat "\"${mvnCmd}\" -Dmaven.test.failure.ignore=true clean package"
+                    def javaHome = tool 'JDK21'
+                    def mvnHome = tool 'Maven3'
+                    
+                    bat """
+                        set JAVA_HOME=${javaHome}
+                        set M2_HOME=${mvnHome}
+                        set PATH=${javaHome}\\bin;${mvnHome}\\bin;%PATH%
+                        echo JAVA_HOME=%JAVA_HOME%
+                        java -version
+                        "${mvnHome}\\bin\\mvn.cmd" -v
+                        "${mvnHome}\\bin\\mvn.cmd" -Dmaven.test.failure.ignore=true clean package
+                    """
                 }
             }
         }
