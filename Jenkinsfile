@@ -15,30 +15,18 @@ pipeline {
         stage('Checkout') {
             steps { checkout scm }
         }
-
         stage('Build JAR') {
             steps {
                 script {
-                    def javaHome = tool 'JDK21'
-                    def mvnHome = tool 'Maven3'
-                    bat """
-                        set JAVA_HOME=${javaHome}
-                        set M2_HOME=${mvnHome}
-                        set PATH=${javaHome}\\bin;${mvnHome}\\bin;%PATH%
-                        echo JAVA_HOME=%JAVA_HOME%
-                        dir "%JAVA_HOME%\\bin\\java.exe"
-                        java -version
-                        "${mvnHome}\\bin\\mvn.cmd" -v
-                        "${mvnHome}\\bin\\mvn.cmd" -Dmaven.test.failure.ignore=true clean package
-                        "${mvnHome}\\bin\\mvn.cmd" -Dmaven.test.failure.ignore=true clean package
-                        echo "--- LISTING TARGET FOLDER ---"
-                        dir target
-                        echo "-----------------------------"
-                    """
+                    tool 'Maven3'
+                    tool 'JDK21'
+                    bat 'mvn clean package -DskipTests'
+                    bat 'echo --- LISTING TARGET FOLDER ---'
+                    bat 'dir target'
+                    bat 'echo -----------------------------'
                 }
             }
         }
-
         stage('Build Docker Image') {
             steps {
                 script {
